@@ -1,14 +1,13 @@
 import asyncio
 from bleak import BleakClient
 
-ADDRESS      = "CB:3B:38:FF:3A:D3"
+ADDRESS      = "YOUR MIXER ADDRESS"
 SERVICE_UUID = "14839ad4-8d7e-415c-9a42-167340cf2339"
 CHAR_UUID    = "0034594a-a8e7-4b1a-a6b1-cd5243059a57"
 
 KEEPALIVE_INTERVAL = 5
-DUMMY_CHAR_UUID = "00002a00-0000-1000-8000-00805f9b34fb"  # Generic Device Name characteristic (safe to read)
+DUMMY_CHAR_UUID = "00002a00-0000-1000-8000-00805f9b34fb" 
 
-# Hex payloads from your capture
 HANDSHAKE_RESPONSE = bytes.fromhex(
     "39 01 38 3e 3a 0e 50 85 8d 7c 37 98 17 82 ce 0d 99 7f 31"
 )
@@ -20,11 +19,6 @@ def compute_checksum(hex_stream):
     return f"{checksum:02X}"
 
 def gen_mute_channel(channel, mute=True):
-    '''    
-    message format: length of message (always 08), 01, channel, mute (01) or unmute (00)
-    channels: 1 = 00, 2 = 01, 3 = 02, 4 = 03, 5/6 = 04, 7/8 = 05, BT = 06,   
-    '''
-
     hexbytes = ["08", "01", f"{channel:02}", "01" if mute else "00"]
     hexbytes.append(compute_checksum(hexbytes))
     return hexbytes
